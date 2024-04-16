@@ -1,0 +1,130 @@
+PROBLEME CU PROCEDURI
+
+-> apeluri imbricate
+
+f(x) = 2 * g(x)
+g(x) = x + 1
+
+.data
+
+    x: .long 10
+
+.text
+.global main
+
+|               |  <----%ebp (fix deasupra la casuta lui %ebp)
+|    %ebp       |
+|    r.a>       |  
+|      x        |
+|_______________|
+
+g:
+    push %ebp
+    mov %esp, %ebp
+    mov 8(%ebp), %eax
+    inc %eax
+    pop %ebp
+    ret
+
+f:
+    push %ebp
+    mov %esp, %ebp
+    mov 8(%ebp), %eax
+
+    push %eax       # apelul imbricat la g
+    call g          # apelul imbricat la g
+    add $4, %esp    # apelul imbricat la g
+
+    mov $2, %ecx
+    mul %ecx
+    pop %ebp
+    ret
+
+
+
+PROCEDURI CU TABLOURI DE DATE
+
+-> sa se calculeze suma elementelor dintr-un array de long-uri
+
+int sum(int *v, int n)
+
+
+.data
+
+    v: .long 27, 15, 23, 19, 68, 41
+    n:. long 6
+
+.text
+.global main
+
+stiva este:
+
+%ebx
+%edi    <_____ %ebp
+%ebp
+<r.a>
+$v 8(%ebp)
+n 12(%ebp) == 0xC(%ebp)
+
+main:
+
+    push n      
+    push $v
+    call sum
+    add $8, %esp
+    # afisez %eax
+
+sum:
+
+    push %ebp
+    mov %esp, %ebp
+    mov $0, %eax        # suma
+    mov $0, %ecx        # index
+    mov 12(%ebp), %edx  # n
+    push %edi           # pt array
+    push %ebx           # pt elem curent din array
+    mov 8(%ebp), %edi
+
+sum_loop:
+
+    cmp %ecx, %edx
+    je sum_exit
+    movl (%edi, %ecx, %4), %ebx
+    add %ebx, %eax
+    inc %ecx
+    jmp sum_loop
+
+sum_exit:
+
+    pop %ebx
+    pop %edi
+    pop %ebp
+    ret
+
+et_exit:
+
+    mov $4, %eax
+    xor %ebx, %ebx
+    int $0x80
+
+
+PROBLEMA 12.12
+
+    Sa se calculeze produsul elementelor impare din array.
+    int prod(int *v, int n)
+
+    -> cititi array-ul
+    -> implementati procedura
+    -> afisati rezultatul
+
+PROBLEMA 12.12.2
+
+    Sa se implementeze o procedura recursiva pentru a calcula suma numerelor de la 0 la N, cu N > 0.
+
+PROBLEMA 12.12.3
+
+    Sa se scrie o procedura care verifica daca un array de intregi este descrescator
+    %eax = 1 daca DA
+    %eax = 0 daca NU
+
+    DOAR PROCEDURA

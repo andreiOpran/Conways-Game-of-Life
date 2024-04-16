@@ -1,0 +1,788 @@
+et_evolutii:			# EVOLUTII
+	
+	incl index
+	movl index, %ecx
+	cmp k, %ecx
+	je et_copieremat
+	
+	movl $1, i
+	
+	for_lines:
+
+		movl i, %ecx
+		cmp %ecx, m
+		je et_evolutii
+
+		movl $1, j
+		for_columns:
+
+			movl j, %ecx
+			cmp %ecx, n
+			je cont1
+
+						# DE COMPLETAT CU IF-URI
+
+			incl j
+			jmp for_columns
+	cont1:
+	incl i
+	jmp for_lines
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.data						#							 i j
+	m: .space 4				# linii						(2,1) -> 9 (i * n + j)
+	n: .space 4 			# coloane					
+	p: .space 4 			# nr celule vii				(%edi, %ecx, 4)  # aici %ecx devine i * n + j (index array)
+	k: .space 4
+	x: .space 4
+	y: .space 4
+	s: .zero 4
+	cn: .space 4
+
+	mat: .space 1600
+	cmat: .space 1600
+	i: .space 4
+	j: .space 4
+	
+	fscanf: .asciz "%d"
+	fprintf: .asciz "%d "
+	endl: .asciz "\n"
+	
+.text
+.global main
+
+main:
+
+	pushl $m			# CITIRE M
+	pushl $fscanf
+	call scanf
+	addl $8, %esp
+	addl $2, m
+	
+	pushl $n			# CITIRE N
+	pushl $fscanf
+	call scanf
+	addl $8, %esp
+	addl $2, n
+
+	pushl $p			# CITIRE P
+	pushl $fscanf
+	call scanf
+	addl $8, %esp
+
+	mov $mat, %edi
+	mov $0, %ecx
+	
+et_while1:
+	
+	cmp p, %ecx
+	je et_citirek
+	
+	pushl %ecx
+	
+	pushl $x 			# CITIRE X
+	pushl $fscanf
+	call scanf
+	addl $8, %esp 
+
+	pushl $y 			# CITIRE Y
+	pushl $fscanf
+	call scanf
+	addl $8, %esp 
+	
+	popl %ecx
+	
+	incl x 
+	incl y 
+
+	movl x, %eax
+	mull n
+	addl y, %eax
+
+	movl $1, (%edi, %eax, 4)
+	incl %ecx
+	jmp et_while1
+
+et_citirek:
+
+	subl $2, m 
+	subl $2, n 
+	
+	pushl $k			# CITIRE K
+	pushl $fscanf
+	call scanf
+	addl $8, %esp
+
+
+	mov $mat, %edi
+	mov k, %ecx
+
+et_evolutii:			# EVOLUTII
+	
+
+
+
+
+et_afismat:				# AFISARE MATRICE
+	
+	incl m				
+	addl $2, n 
+	movl n, %esi
+	# decl %esi			# MATRICEA EXTINSA				
+	incl m				# MATRICEA EXTINSA
+
+	movl $0, i			# MATRICEA EXTINSA
+
+	for_linesafis:
+
+		movl i, %ecx
+		cmp %ecx, m
+		je et_exit
+
+		movl $0, j		# MATRICEA EXTINSA
+
+		for_columnsafis:
+
+			movl j, %ecx
+			cmp %ecx, %esi
+			je cont
+
+			movl i, %eax
+			movl $0, %edx
+			mull n
+			addl j, %eax
+
+			lea mat, %edi
+			movl (%edi, %eax, 4), %ebx
+
+			pushl %ebx
+			pushl $fprintf
+			call printf
+			popl %ebx
+			popl %ebx
+
+			pushl $0
+			call fflush
+			popl %ebx
+
+			incl j
+			jmp for_columnsafis
+
+	cont:
+
+		movl $4, %eax
+		movl $1, %ebx
+		movl $endl, %ecx
+		movl $2, %edx
+		int $0x80
+
+		incl i
+		jmp for_linesafis
+
+et_exit:
+
+	mov $1, %eax
+    mov $0, %ebx
+    int $0x80
+
+
+
+
+
+
+
+
+
+
+
+
+
+et_copieremat:
+
+movl $1, i
+
+	for_linescopiere:
+
+		movl i, %ecx
+		cmp %ecx, m
+		je et_afismat
+
+		movl $1, j
+		for_columnscopiere:
+
+			movl j, %ecx
+			cmp %ecx, n
+			je continuare
+
+						# DE COMPLETAT COPIEREA MATRICII
+
+			incl j
+			jmp for_columnscopiere
+
+	continuare:
+	incl i
+	jmp for_linescopiere
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# AFISARE MATRICE NEEXTINSA
+
+et_afis_mat:
+
+	mov n, %esi
+	mov m, %ebp
+	incl %esi
+	incl n
+	incl %ebp
+	# incl %esi				# MATRICEA EXTINSA
+	incl n					# MATRICEA EXTINSA
+	# incl %ebp				# MATRICEA EXTINSA
+	movl $1, i				# MATRICEA EXTINSA
+
+	for_linii:
+
+		movl i, %ecx
+		cmp %ecx, %ebp
+		je et_exit
+		movl $1, j			# MATRICEA EXTINSA
+
+		for_coloane:
+
+			movl j, %ecx
+			cmp %ecx, %esi
+			je et_endl
+
+			movl i, %eax
+			# movl $0, %edx
+			mull n				# MATRICEA EXTINSA
+			addl j, %eax
+
+			lea mat, %edi
+			movl (%edi, %eax, 4), %ebx
+			pushl %ebx
+			pushl $print
+			call printf
+			addl $8, %esp
+
+			pushl $0
+			call fflush
+			popl %ebx
+
+			incl j
+			jmp for_coloane
+		
+		et_endl:
+
+			pushl $endl
+			call printf
+			addl $4, %esp
+
+			incl i
+			jmp for_linii
+
+
+
+
+# AFISARE MATRICE EXTINSA
+
+
+et_afis_mat:
+
+	mov n, %esi
+	mov m, %ebp
+	incl %esi
+	incl n
+	incl %ebp
+	incl %esi				# MATRICEA EXTINSA
+	# incl n					# MATRICEA EXTINSA
+	incl %ebp				# MATRICEA EXTINSA
+	movl $0, i				# MATRICEA EXTINSA
+
+	for_linii:
+
+		movl i, %ecx
+		cmp %ecx, %ebp
+		je et_exit
+		movl $0, j			# MATRICEA EXTINSA
+
+		for_coloane:
+
+			movl j, %ecx
+			cmp %ecx, %esi
+			je et_endl
+
+			movl i, %eax
+			# movl $0, %edx
+			mull %esi			# MATRICEA EXTINSA
+			addl j, %eax
+
+			lea mat, %edi
+			movl (%edi, %eax, 4), %ebx
+			pushl %ebx
+			pushl $print
+			call printf
+			addl $8, %esp
+
+			pushl $0
+			call fflush
+			popl %ebx
+
+			incl j
+			jmp for_coloane
+		
+		et_endl:
+
+			pushl $endl
+			call printf
+			addl $4, %esp
+
+			incl i
+			jmp for_linii
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.data						#							 i j
+	m: .space 4				# linii						(2,1) -> 9 (i * n + j)
+	n: .space 4 			# coloane					
+	p: .space 4 			# nr celule vii				(%edi, %ecx, 4)  # aici %ecx devine i * n + j (index array)
+	k: .space 4
+	x: .space 4
+	y: .space 4
+	s: .space 4
+	cn: .space 4
+	cont: .space 4
+	copieeax: .space 4
+
+	mat: .space 1600
+	cmat: .space 1600
+	i: .space 4
+	j: .space 4
+	
+	scan: .asciz "%d"
+	print: .asciz "%d "
+	endl: .asciz "\n"
+	
+.text
+.global main
+
+main:
+
+	pushl $m			# CITIRE M
+	pushl $scan
+	call scanf
+	addl $8, %esp
+	
+	pushl $n			# CITIRE N
+	pushl $scan
+	call scanf
+	addl $8, %esp
+
+	pushl $p			# CITIRE P
+	pushl $scan
+	call scanf
+	addl $8, %esp
+
+# (1)---------------------------------------------------------------
+
+	movl $mat, %edi   # FOR P
+	movl $0, %ecx
+
+	movl $0, cont
+
+et_for_p:
+
+	mov cont, %ecx
+	cmp p, %ecx
+	je et_citire_k
+
+	pushl $x			# CITIRE X
+	pushl $scan
+	call scanf
+	addl $8, %esp
+
+	pushl $y			# CITIRE Y
+	pushl $scan
+	call scanf
+	addl $8, %esp
+
+	incl x
+	incl y
+
+	movl x, %eax
+	addl $2, n
+	mull n
+	subl $2, n
+	addl y, %eax
+
+	movl $1, (%edi, %eax, 4)
+
+	incl cont
+	jmp et_for_p
+
+et_citire_k:
+
+	pushl $k			# CITIRE K
+	pushl $scan
+	call scanf
+	addl $8, %esp
+	
+	incl m
+	incl n
+	mov $0, %ebp
+
+et_evolutii:			# EVOLUTII
+	
+	cmp %ebp, k
+	je et_afis_mat
+
+	movl $1, i
+	et_for_evolutii_linii:
+
+		movl i, %ecx
+		cmp m, %ecx
+		je et_incrementare_k
+		movl $1, j
+
+				
+
+		et_for_evolutii_coloane:
+
+			movl j, %ecx
+			cmp n, %ecx
+			je et_for_evolutii_continuare
+
+			mov %ecx, cont
+
+			incl n
+
+			movl $0, s
+
+			movl i, %eax
+			mull n
+			addl j, %eax
+
+			movl %eax, copieeax
+
+			subl n, %eax		# mat[i - 1][j - 1]
+			subl $1, %eax
+			lea mat, %edi
+			movl (%edi, %eax, 4), %ebx
+			addl %ebx, s
+
+			movl copieeax, %eax # mat[i - 1][j]
+			subl n, %eax		
+			lea mat, %edi
+			movl (%edi, %eax, 4), %ebx
+			addl %ebx, s
+
+			movl copieeax, %eax # mat[i - 1][j + 1]
+			subl n, %eax		
+			addl $1, %eax
+			lea mat, %edi
+			movl (%edi, %eax, 4), %ebx
+			addl %ebx, s
+
+			movl copieeax, %eax # mat[i][j - 1]		
+			subl $1, %eax
+			lea mat, %edi
+			movl (%edi, %eax, 4), %ebx
+			addl %ebx, s
+
+			movl copieeax, %eax # mat[i][j + 1]		
+			addl $1, %eax
+			lea mat, %edi
+			movl (%edi, %eax, 4), %ebx
+			addl %ebx, s
+
+			movl copieeax, %eax # mat[i + 1][j - 1]
+			addl n, %eax		
+			subl $1, %eax
+			lea mat, %edi
+			movl (%edi, %eax, 4), %ebx
+			addl %ebx, s
+
+			movl copieeax, %eax # mat[i + 1][j]
+			addl n, %eax
+			lea mat, %edi
+			movl (%edi, %eax, 4), %ebx
+			addl %ebx, s
+
+			movl copieeax, %eax # mat[i + 1][j + 1]
+			addl n, %eax
+			addl $1, %eax
+			lea mat, %edi
+			movl (%edi, %eax, 4), %ebx
+			addl %ebx, s			
+			
+			decl n
+
+			movl s, %ebx
+			pushl %ebx
+			pushl $print
+			call printf
+			addl $8, %esp
+
+			mov cont, %ecx
+
+			incl j
+			jmp et_for_evolutii_coloane
+
+	et_for_evolutii_continuare:
+
+		pushl $endl
+		call printf
+		addl $4, %esp
+
+		incl i
+		jmp et_for_evolutii_linii
+
+et_incrementare_k:
+
+	incl %ebp
+	jmp et_evolutii
+
+et_afis_mat:
+
+	decl n
+	decl m
+
+	mov n, %esi
+	mov m, %ebp
+	incl %esi
+	incl n
+	incl %ebp
+	incl %esi				# MATRICEA EXTINSA
+	# incl n					# MATRICEA EXTINSA
+	incl %ebp				# MATRICEA EXTINSA
+	movl $0, i				# MATRICEA EXTINSA
+
+	for_linii:
+
+		movl i, %ecx
+		cmp %ecx, %ebp
+		je et_exit
+		movl $0, j			# MATRICEA EXTINSA
+
+		for_coloane:
+
+			movl j, %ecx
+			cmp %ecx, %esi
+			je et_endl
+
+			movl i, %eax
+			# movl $0, %edx
+			mull %esi			# MATRICEA EXTINSA
+			addl j, %eax
+
+			lea mat, %edi
+			movl (%edi, %eax, 4), %ebx
+			pushl %ebx
+			pushl $print
+			call printf
+			addl $8, %esp
+
+			pushl $0
+			call fflush
+			popl %ebx
+
+			incl j
+			jmp for_coloane
+		
+		et_endl:
+
+			pushl $endl
+			call printf
+			addl $4, %esp
+
+			incl i
+			jmp for_linii
+
+et_exit:
+
+	movl $1, %eax
+    movl $0, %ebx
+    int $0x80
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+mov n, %esi
+mov m, %ebp
+
+movl $0, i			
+
+	for_linii_copiere:
+
+		movl i, %ecx
+		cmp %ecx, %ebp
+		je et_exit
+
+		movl $0, j
+
+		for_coloane_copiere:
+
+			movl j, %ecx
+			cmp %ecx, %esi
+			je et_cont_copiere
+
+
+			incl j
+			jmp for_coloane_copiere
+		
+		et_cont_copiere:
+
+			incl i
+			jmp for_linii_copiere

@@ -1,0 +1,189 @@
+RECAPITULARE PROCEDURI
+
+- sunt o grupare de instructiuni cre au o eticheta
+- difera de etichetele standard
+
+	
+	prin mecanismul de control
+	
+	call et -> push %eip
+			-> jmp et
+			
+	
+	ret -> pop %eip
+		-> (jmp %eip)
+		
+	
+	
+	push $ebx
+	[
+	|	sub $4, %esp
+	|	mov %ebx, 0(%esp)
+	[
+	
+	pop %ebx
+	[
+	|	mov 0(%esp), %ebx   
+	|	add $4, %esp
+	[
+	
+			 |     |		^
+			 |.....|		|
+   %esp > __ |_____|		|	adrese				x86 - 32b
+			 |     |		|	mai
+			 |%ebx |		|	mici				stiva este aliniata la adrese 
+			 |_____|		|						de multiplu de 4(B)
+	
+	
+	
+	
+	
+	
+	
+CONVENTII DE IMPLEMENTARE
+
+-ret se face in %eax, %ecx, %edx
+-reg %ebx, %esi, %edi, %ebp, %esp trebuie restaurati
+-reg %ebp (base pointer) este utilizat pt. delimitarea cadrului de apel si pt. accesare constanta
+
+
+
+
+
+
+
+CITIRE SI AFISARE MATRICE
+
+
+matrice: .zero 1600
+
+for(i = 0; i < n; i++) -> for(i = 1; i < n+1; i++)
+
+
+
+.data										 i j
+	m: .space 4	# linii						(2,1) -> 9 (i * n + j)
+	n: .space 4 # coloane					
+	p: .space 4 # nr celule vii				(%edi, %ecx, 4)  # aici %ecx devine i * n + j (index array)
+	lineIndex: .space 4
+	colIndex: .space 4
+	k: .space 4
+	x: .space 4
+	y: .space 4
+	formatScanf: .asciz "%d"
+	formatPrintf: .asciz "%d "
+	endl: .asciz "\n"
+	
+.text
+.global main
+
+main:
+
+	# scanf("%d", &m) 
+	# scanf("%d", &n) 
+	# scanf("%d", &p) 
+
+	push $m # $n / $p
+	push $formatScanf
+	call scanf
+	add $8, %esp # analog pt n si p
+	
+	mov $matrix, %edi
+	mov $0, %ecx
+	
+	# for(i = 0; i<p; i++)
+	# {
+	# 	 scanf("%d", &x);
+	#	 scanf("%d", &y);
+	#	 matrix[x][y] = 1;
+	# }  
+
+for_p:
+	
+	cmp p, %ecx
+	je et_afismatr
+	push $ecx
+	
+	push $x # $y
+	push $formatScanf
+	call scanf
+	add $8, %esp # analog pt y
+	
+	pop %ecx
+
+	movl x, %eax
+	mull n
+	addl y, %eax
+
+	movl $1, (%edi, %eax, 4)
+	inc %ecx
+	jmp for_p
+	
+	
+et_afismatr:
+
+	#citire k ca la linia 86 (push $m # $n / $p)
+	
+	# for(i = 0; i<m; i++)
+	# {
+	# 	 for( j = 0; j<n;j++)
+	# 	 {
+	# 	 	cout<<m[i][j]<<' ';
+	# 	 }
+	# 	 cout<<"\n";
+	# }	
+	
+	
+	mov $0, lineIndex
+
+for_lines:
+
+	mov lineIndex, %ecx
+	cmp m, %ecx
+	je et_exit
+	mov $0, colIndex
+	
+for_columns:
+
+	mov colIndex, %ecx
+	cmp n, %ecx
+	je cout_for_lines
+	
+	movl lineIndex, %eax 	#afisez (%edi, %eax, 4)	   
+	mull n					#afisez (%edi, %eax, 4)     
+	add colIndex			#afisez (%edi, %eax, 4)
+
+	# sageata de la liniile 3 de sus
+	#
+	# movl(%edi, %eax, 4), %ebx
+	# push %ebx
+	# push $formatPrintf
+	# call printf
+	# add $8, %esp
+
+	inc colIndex
+	jmp for_columns
+
+cout_for_lines:
+
+	push $endl
+	call printf
+	add $4, %esp
+	inc lineIndex
+	jmp for_lines
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
