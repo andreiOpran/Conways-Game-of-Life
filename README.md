@@ -1,4 +1,6 @@
-# Conway’s Game of Life
+# 142_Opran_Andrei_0.s preia input-ul de la tastatura, iar 142_Opran_Andrei_2.s preia input-ul dintr-un fisier
+
+## Conway’s Game of Life
 
 
 Conway’s Game of Life este un zero-player game bidimensional, inventat de matematicianul John
