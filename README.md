@@ -9,21 +9,25 @@ noi celule in sistem. Acest sistem evolutiv este Turing-complete.
 Starea unui sistem este descrisa de starea cumulata a celulelor componente, iar pentru acestea
 avem urmatoarele reguli:
 
-1.Subpopulare
+1. Subpopulare
+   
 Fiecare celula (care este in viata in generatia curenta) cu mai putin de doi vecini in viata, moare in generatia urmatoare.
 
-2.Continuitate celule vii
+2. Continuitate celule vii
+   
 Fiecare celula (care este in viata in generatia curenta), cu doi sau trei vecini in viata, va exista si in generatia urmatoare.
 
-3.Ultrapopulare
+3. Ultrapopulare
+   
 Fiecare celula (care este in viata in generatia curenta), care are mai mult de trei vecini in viata, moare in generatia urmatoare.
 
-4.Creare
+4. Creare
+   
 O celula moarta care are exact trei vecini in viata, va fi creata in generatia urmatoare.
 
-5.Continuitate celule moarte
+5. Continuitate celule moarte
+   
 Orice alta celula moarta, care nu se incadreaza in regula de creare, ramane o celula moarta.
-
 
 Vecinii unei celule se considera urmatorii 8, intr-o matrice bidimensionala:
 
