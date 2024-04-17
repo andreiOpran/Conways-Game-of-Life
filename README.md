@@ -59,7 +59,7 @@ In primul rand, vom considera extinderea acestei matrice S0 de dimensiuni 3×4 i
 
 In cele ce urmeaza, vom lucra doar in interiorul matricei principale, dar considerand extinderea pentru procesarea corecta a vecinilor. Vom parcurge fiecare element, si vom vedea ce regula evolutiva putem aplica. De exemplu, pentru elementul de pe pozitia (0,0) in matricea initiala, vom aplica regula de continuitate a celulelor moarte, deoarece este o celula moarta si nu are exact trei vecini in viata. 
 
-Urmatoarea celula este in viata, si are exact doi vecini in viata, astfel ca se aplica regula conti- nuitatii celulelor in viata. 
+Urmatoarea celula este in viata, si are exact doi vecini in viata, astfel ca se aplica regula continuitatii celulelor in viata. 
 
 Pentru celula de pe pozitia (0,2) in S0, observam ca are un singur vecin, astfel ca se aplica regula de subpopulare - celula va muri in generatia urmatoare. 
 
