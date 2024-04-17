@@ -11,23 +11,23 @@ avem urmatoarele reguli:
 
 1. Subpopulare
    
-Fiecare celula (care este in viata in generatia curenta) cu mai putin de doi vecini in viata, moare in generatia urmatoare.
+   Fiecare celula (care este in viata in generatia curenta) cu mai putin de doi vecini in viata, moare in generatia urmatoare.
 
 2. Continuitate celule vii
    
-Fiecare celula (care este in viata in generatia curenta), cu doi sau trei vecini in viata, va exista si in generatia urmatoare.
+   Fiecare celula (care este in viata in generatia curenta), cu doi sau trei vecini in viata, va exista si in generatia urmatoare.
 
 3. Ultrapopulare
    
-Fiecare celula (care este in viata in generatia curenta), care are mai mult de trei vecini in viata, moare in generatia urmatoare.
+   Fiecare celula (care este in viata in generatia curenta), care are mai mult de trei vecini in viata, moare in generatia urmatoare.
 
 4. Creare
    
-O celula moarta care are exact trei vecini in viata, va fi creata in generatia urmatoare.
+   O celula moarta care are exact trei vecini in viata, va fi creata in generatia urmatoare.
 
 5. Continuitate celule moarte
    
-Orice alta celula moarta, care nu se incadreaza in regula de creare, ramane o celula moarta.
+   Orice alta celula moarta, care nu se incadreaza in regula de creare, ramane o celula moarta.
 
 Vecinii unei celule se considera urmatorii 8, intr-o matrice bidimensionala:
 
@@ -43,7 +43,8 @@ Observatie.
 Pentru celulele aflate pe prima linie, prima coloana, ultima linie, respectiv ultima coloana, se considera extinderea la 8 vecini, prin considerarea celor care nu se afla in matrice ca fiind celule moarte. 
 
 Exemplificare.
-Fie urmatoarea configuratie initiala S0:
+
+   Fie urmatoarea configuratie initiala S0:
 
 ```
 0 1 1 0
