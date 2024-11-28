@@ -1,10 +1,15 @@
 # Conway's Game of Life
 <br>
 
-## Note
+## Short description of the project
 
-### 142_Opran_Andrei_0.s takes input from the keyboard, and 142_Opran_Andrei_2.s takes input from a file.
+A simulator for Conway’s Game of Life, which initializes a matrix-based grid, takes user inputs to define live cells,
+and iteratively applies rules to evolve the grid. Finally, it prints the resulting matrix configuration, showing live and
+dead cells after evolution. The code demonstrates direct memory manipulation, conditional branching, and efficient
+looping in Assembly x86.
+
 <br>
+
 
 ## Overview
 
@@ -91,3 +96,9 @@ Following this logic, the system evolves into the following configuration for `S
 0 0 0 0 0 0
 0 0 0 0 0 0
 ```
+
+<br>
+
+## Note
+
+### 142_Opran_Andrei_0.s takes input from the keyboard, and 142_Opran_Andrei_2.s takes input from a file.
