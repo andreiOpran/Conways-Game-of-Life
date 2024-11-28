@@ -1,54 +1,48 @@
-# Conway’s Game of Life
+# Conway's Game of Life
 
-## 142_Opran_Andrei_0.s preia input-ul de la tastatura, iar 142_Opran_Andrei_2.s preia input-ul dintr-un fisier
+## Overview
 
+Conway's Game of Life is a two-dimensional zero-player game invented by mathematician John Horton Conway in 1970. The purpose of this game is to observe the evolution of a system of cells, starting from an initial configuration, by introducing rules governing the death and creation of new cells in the system. This evolutionary system is Turing-complete.
 
+The state of a system is described by the cumulative state of its component cells, governed by the following rules:
 
+1. **Underpopulation**
+   - Any cell (alive in the current generation) with fewer than two live neighbors dies in the next generation.
 
-Conway’s Game of Life este un zero-player game bidimensional, inventat de matematicianul John
-Horton Conway in anul 1970. Scopul acestui joc este de a observa evolutia unui sistem de celule,
-pornind de la o configuratie initiala, introducand reguli referitoare la moartea, respectiv crearea unei
-noi celule in sistem. Acest sistem evolutiv este Turing-complete.
+2. **Survival of living cells**
+   - Any cell (alive in the current generation) with two or three live neighbors survives to the next generation.
 
-Starea unui sistem este descrisa de starea cumulata a celulelor componente, iar pentru acestea
-avem urmatoarele reguli:
+3. **Overpopulation**
+   - Any cell (alive in the current generation) with more than three live neighbors dies in the next generation.
 
-1. Subpopulare
-   
-   Fiecare celula (care este in viata in generatia curenta) cu mai putin de doi vecini in viata, moare in generatia urmatoare.
+4. **Reproduction**
+   - A dead cell with exactly three live neighbors becomes alive in the next generation.
 
-2. Continuitate celule vii
-   
-   Fiecare celula (care este in viata in generatia curenta), cu doi sau trei vecini in viata, va exista si in generatia urmatoare.
+5. **Continuation of dead cells**
+   - Any other dead cell, not fitting the reproduction rule, remains dead.
 
-3. Ultrapopulare
-   
-   Fiecare celula (care este in viata in generatia curenta), care are mai mult de trei vecini in viata, moare in generatia urmatoare.
+## Neighbor Definition
 
-4. Creare
-   
-   O celula moarta care are exact trei vecini in viata, va fi creata in generatia urmatoare.
+The neighbors of a cell are the 8 adjacent cells in a two-dimensional matrix.
 
-5. Continuitate celule moarte
-   
-   Orice alta celula moarta, care nu se incadreaza in regula de creare, ramane o celula moarta.
-
-Vecinii unei celule se considera urmatorii 8, intr-o matrice bidimensionala:
 
 ```
 00          01          02
-10    celula curenta    12
+10    current cell      12
 20          21          22
 ```
 
-Definim starea unui sistem la generatianca fiind o matrice Sn ∈ M m×n({0,1}) ( m - numarul de linii, respectiv n - numarul de coloane), unde elementul 0 reprezinta o celula moarta, respectiv 1 reprezinta o celula in viata (in generatia curenta). Definim ok-evolutie (k≥0) a sistemului o iteratieS 0 → S1 → ··· → Sk, unde fiecare S(i+1) se obtine din Si, aplicand cele cinci reguli enuntate mai sus. 
+## System State Representation
 
-Observatie.
-Pentru celulele aflate pe prima linie, prima coloana, ultima linie, respectiv ultima coloana, se considera extinderea la 8 vecini, prin considerarea celor care nu se afla in matrice ca fiind celule moarte. 
+The state of the system at generation `n` is represented by a matrix `Sn` where: `Sn` ∈ M m×n({0,1}) ( `m` - number of lines, `n` - number of colons), 0 represents a dead cell, 1 represents a living cell (in the current generation). We define `k-evolution` (k≥0) an iteration `S0` → `S1` → ··· → `Sk`, where every `S(i+1)` is derived from `Si`, by applying the rules listed above.
 
-Exemplificare.
+## Special Cases for Edge Cells
 
-   Fie urmatoarea configuratie initiala S0:
+For cells located on the first row, first column, last row, or last column, neighbors outside the matrix are considered as dead.
+
+## Example
+
+### Initial Configuration (`S0`)
 
 ```
 0 1 1 0
@@ -56,7 +50,7 @@ Exemplificare.
 0 0 1 1
 ```
 
-In primul rand, vom considera extinderea acestei matrice S0 de dimensiuni 3×4 intr-o matrice extinsa S0 de dimensiuni 5×6 , astfel:
+To handle edge cases, the `3x4` matrix is extended to a `5x6` matrix:
 
 ```
 0 0 0 0 0 0
@@ -66,13 +60,15 @@ In primul rand, vom considera extinderea acestei matrice S0 de dimensiuni 3×4 i
 0 0 0 0 0 0
 ```
 
-In cele ce urmeaza, vom lucra doar in interiorul matricei principale, dar considerand extinderea pentru procesarea corecta a vecinilor. Vom parcurge fiecare element, si vom vedea ce regula evolutiva putem aplica. De exemplu, pentru elementul de pe pozitia (0,0) in matricea initiala, vom aplica regula de continuitate a celulelor moarte, deoarece este o celula moarta si nu are exact trei vecini in viata. 
+### Applying Evolution Rules
 
-Urmatoarea celula este in viata, si are exact doi vecini in viata, astfel ca se aplica regula continuitatii celulelor in viata. 
+Each cell in the main matrix is processed according to the rules:
 
-Pentru celula de pe pozitia (0,2) in S0, observam ca are un singur vecin, astfel ca se aplica regula de subpopulare - celula va muri in generatia urmatoare. 
+- **Cell (0,0)**: Dead with fewer than 3 live neighbors → remains dead (Rule 5).
+- **Cell (0,1)**: Alive with exactly 2 live neighbors → survives (Rule 2).
+- **Cell (0,2)**: Alive with only 1 live neighbor → dies (Rule 1).
 
-Urmand acelasi rationament pentru toate celulele, configuratia sistemului intr-o iteratie (in S1) va fi:
+Following this logic, the system evolves into the following configuration for `S1`.
 
 ```
 0 0 0 0 0 0
