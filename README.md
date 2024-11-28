@@ -1,8 +1,10 @@
 # Conway's Game of Life
+<br>
 
 ## Note
 
 ### 142_Opran_Andrei_0.s takes input from the keyboard, and 142_Opran_Andrei_2.s takes input from a file.
+<br>
 
 ## Overview
 
@@ -36,13 +38,19 @@ The neighbors of a cell are the 8 adjacent cells in a two-dimensional matrix.
 20          21          22
 ```
 
+
+
 ## System State Representation
 
 The state of the system at generation `n` is represented by a matrix `Sn` where: `Sn` ∈ M m×n({0,1}) ( `m` - number of lines, `n` - number of colons), 0 represents a dead cell, 1 represents a living cell (in the current generation). We define `k-evolution` (k≥0) an iteration `S0` → `S1` → ··· → `Sk`, where every `S(i+1)` is derived from `Si`, by applying the rules listed above.
 
+
+
 ## Special Cases for Edge Cells
 
 For cells located on the first row, first column, last row, or last column, neighbors outside the matrix are considered as dead.
+
+
 
 ## Example
 
@@ -63,6 +71,8 @@ To handle edge cases, the `3x4` matrix is extended to a `5x6` matrix:
 0 0 0 1 1 0
 0 0 0 0 0 0
 ```
+
+
 
 ### Applying Evolution Rules
 
